@@ -1,0 +1,16 @@
+NETCHECKSH=INSTALLDIR/netcheck.sh
+NETCHECK_OPTS="-f LOGDIR/connection.log"
+
+
+
+# netcheck.sh -h                                           Display this message
+# netcheck.sh -f path/my_log_file.log          Specify log file and path to use
+# netcheck.sh -s                                 Disable speedtest on reconnect
+# netcheck.sh -c                Check connection ever (n) seconds. Default is 5
+# netcheck.sh -u            URL/Host to check, default is http://www.google.com
+# netcheck.sh -w                                  Enable the remote webinteface
+# netcheck.sh -p                  Specify an optional port for the webinterface
+# netcheck.sh -i                           Install netcheck as a system service
+# netcheck.sh -d path/script            Specify script to execute on disconnect
+# netcheck.sh -r path/script             Specify script to execute on reconnect
+# netcheck.sh -e                      Excecute speedtest every connection check
