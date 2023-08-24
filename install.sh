@@ -55,7 +55,7 @@ if [ $SERVICE ]; then
 else
   # modify script default log dir
   LOGDIRQUOTED=$(printf '%s' "$LOGDIR" | sed 's/[#\]/\\\0/g')
-  sed -e "s#LOGDIR#${LOGDIRQUOTED}#g" netcheck.sh | tee netcheck.sh > /dev/null
+  sed -e "s#LOGDIR#${LOGDIRQUOTED}#g" netcheck.sh | tee $INSTALLDIR/netcheck.sh > /dev/null
   # hopefully that's not a race condition?
 
 fi
