@@ -52,4 +52,10 @@ if [ $SERVICE ]; then
   sudo service netcheck status
 
   echo add \"service netcheck start\" to /etc/wsl.conf
+else
+  # modify script default log dir
+  LOGDIRQUOTED=$(printf '%s' "$LOGDIR" | sed 's/[#\]/\\\0/g')
+  sed -e "s#LOGDIR#${LOGDIRQUOTED}#g" netcheck.sh | tee netcheck.sh > /dev/null
+  # hopefully that's not a race condition?
+
 fi
