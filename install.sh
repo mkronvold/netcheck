@@ -19,17 +19,23 @@ cp internet_status_chart.sh $INSTALLDIR
 
 # installing log directory
 mkdir -p $LOGDIR
-cp -rv log $LOGDIR
+cp -rv log/* $LOGDIR/
 
 # service files
-cp -rv etc /
-cat etc/default/netcheck | sed -e 's/INSTALLDIR/${INSTALLDIR}/g' | sed -e 's/LOGDIR/${LOGDIR}/g' > /etc/default/netcheck
-cat etc/sudoers.d/netcheck | sed -e 's/INSTALLDIR/${INSTALLDIR}/g' | sed -e 's/LOGDIR/${LOGDIR}/g' > /etc/sudoers.d/netcheck
+sudo cp -rv etc/default /
+sudo cp -rv etc/init.d /
+
+# quote paths for sed'sake
+INSTALLDIRQUOTED=$(printf '%s' "$INSTALLDIR" | sed 's/[#\]/\\\0/g')
+LOGDIRQUOTED=$(printf '%s' "$LOGDIR" | sed 's/[#\]/\\\0/g')
+
+cat etc/sudoers.d/netcheck | sed -e "s#INSTALLDIR#${INSTALLDIRQUOTED}#g" | sed -e "s#LOGDIR#${LOGDIRQUOTED}#g" | sudo tee /etc/sudoers.d/netcheck > /dev/null
+cat etc/default/netcheck | sed -e "s#INSTALLDIR#${INSTALLDIRQUOTED}#g" | sed -e "s#LOGDIR#${LOGDIRQUOTED}#g" | sudo tee /etc/default/netcheck > /dev/null
 
 # creating python link if it's missing
-[ $(which python) ] || ln -s $(which python3) /usr/bin/python
+[ $(which python) ] || sudo ln -s $(which python3) /usr/bin/python
 
 # Verifying service installed correctly
-service netcheck status
+sudo service netcheck status
 
 echo add \"service netcheck start\" to /etc/wsl.conf
