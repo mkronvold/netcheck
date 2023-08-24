@@ -1,3 +1,3 @@
-%sudo ALL=NOPASSWD: INSTALLDIR/netcheck.sh
-%sudo ALL=NOPASSWD: INSTALLDIR/internet_status_chart.sh
+%sudo ALL=NOPASSWD: /home/mkronvold/.local/bin/netcheck.sh
+%sudo ALL=NOPASSWD: /home/mkronvold/.local/bin/internet_status_chart.sh
 %sudo ALL=NOPASSWD: /usr/sbin/service netcheck *

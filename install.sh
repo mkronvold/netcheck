@@ -29,8 +29,9 @@ sudo cp -rv etc/init.d /
 INSTALLDIRQUOTED=$(printf '%s' "$INSTALLDIR" | sed 's/[#\]/\\\0/g')
 LOGDIRQUOTED=$(printf '%s' "$LOGDIR" | sed 's/[#\]/\\\0/g')
 
-cat etc/sudoers.d/netcheck | sed -e "s#INSTALLDIR#${INSTALLDIRQUOTED}#g" | sed -e "s#LOGDIR#${LOGDIRQUOTED}#g" | sudo tee /etc/sudoers.d/netcheck > /dev/null
-cat etc/default/netcheck | sed -e "s#INSTALLDIR#${INSTALLDIRQUOTED}#g" | sed -e "s#LOGDIR#${LOGDIRQUOTED}#g" | sudo tee /etc/default/netcheck > /dev/null
+
+sed -e "s#INSTALLDIR#${INSTALLDIRQUOTED}#g" -e "s#LOGDIR#${LOGDIRQUOTED}#g" etc/sudoers.d/netcheck | sudo tee /etc/sudoers.d/netcheck > /dev/null
+sed -e "s#INSTALLDIR#${INSTALLDIRQUOTED}#g" -e "s#LOGDIR#${LOGDIRQUOTED}#g" etc/default/netcheck | sudo tee /etc/default/netcheck > /dev/null
 
 # creating python link if it's missing
 [ $(which python) ] || sudo ln -s $(which python3) /usr/bin/python
