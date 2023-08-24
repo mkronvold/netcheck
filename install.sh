@@ -34,28 +34,31 @@ cp -rv log/* $LOGDIR/
 
 
 if [ $SERVICE ]; then
+
+  [ "$(whoami)" == "root" ] || echo "Service installation will fail without sudo."
+
   # service files
-  sudo cp -rv etc/default /
-  sudo cp -rv etc/init.d /
+  cp -rv etc/default /
+  cp -rv etc/init.d /
 
   # quote paths for sed'sake
   INSTALLDIRQUOTED=$(printf '%s' "$INSTALLDIR" | sed 's/[#\]/\\\0/g')
   LOGDIRQUOTED=$(printf '%s' "$LOGDIR" | sed 's/[#\]/\\\0/g')
 
-  sed -e "s#INSTALLDIR#${INSTALLDIRQUOTED}#g" -e "s#LOGDIR#${LOGDIRQUOTED}#g" etc/sudoers.d/netcheck | sudo tee /etc/sudoers.d/netcheck > /dev/null
-  sed -e "s#INSTALLDIR#${INSTALLDIRQUOTED}#g" -e "s#LOGDIR#${LOGDIRQUOTED}#g" etc/default/netcheck | sudo tee /etc/default/netcheck > /dev/null
+  sed -e "s#INSTALLDIR#${INSTALLDIRQUOTED}#g" -e "s#LOGDIR#${LOGDIRQUOTED}#g" etc/sudoers.d/netcheck | tee /etc/sudoers.d/netcheck > /dev/null
+  sed -e "s#INSTALLDIR#${INSTALLDIRQUOTED}#g" -e "s#LOGDIR#${LOGDIRQUOTED}#g" etc/default/netcheck | tee /etc/default/netcheck > /dev/null
 
   # creating python link if it's missing
-  [ $(which python) ] || sudo ln -s $(which python3) /usr/bin/python
+  [ $(which python) ] || ln -s $(which python3) /usr/bin/python
 
   # Verifying service installed correctly
-  sudo service netcheck status
+  service netcheck status
 
   echo add \"service netcheck start\" to /etc/wsl.conf
-else
-  # modify script default log dir
-  LOGDIRQUOTED=$(printf '%s' "$LOGDIR" | sed 's/[#\]/\\\0/g')
-  sed -e "s#LOGDIR#${LOGDIRQUOTED}#g" netcheck.sh | tee $INSTALLDIR/netcheck.sh > /dev/null
-  # hopefully that's not a race condition?
-
 fi
+
+# modify script default log dir
+LOGDIRQUOTED=$(printf '%s' "$LOGDIR" | sed 's/[#\]/\\\0/g')
+sed -e "s#LOGDIR#${LOGDIRQUOTED}#g" netcheck.sh | tee $INSTALLDIR/netcheck.sh > /dev/null
+sed -e "s#LOGDIR#${LOGDIRQUOTED}#g" internet_status_chart.sh | tee $INSTALLDIR/internet_status_chart.sh > /dev/null
+# hopefully that's not a race condition?

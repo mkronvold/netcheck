@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 set -o nounset
-log=~/src/netcheck/log/connection.log
+#log=~/src/netcheck/log/connection.log
+log=LOGDIR/connection.log
 
 # Parse options
 space=" "
